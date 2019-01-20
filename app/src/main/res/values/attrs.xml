@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="EasyRecyclerView">
+        <attr name="layout_empty" format="reference" />
+        <attr name="layout_progress" format="reference" />
+        <attr name="layout_error" format="reference" />
+        <attr name="recyclerClipToPadding" format="boolean" />
+        <attr name="recyclerPadding" format="dimension" />
+        <attr name="recyclerPaddingTop" format="dimension" />
+        <attr name="recyclerPaddingBottom" format="dimension" />
+        <attr name="recyclerPaddingLeft" format="dimension" />
+        <attr name="recyclerPaddingRight" format="dimension" />
+        <attr name="scrollbarStyle">
+            <enum name="insideOverlay" value="0x0" />
+            <enum name="insideInset" value="0x01000000" />
+            <enum name="outsideOverlay" value="0x02000000" />
+            <enum name="outsideInset" value="0x03000000" />
+        </attr>
+        <attr name="scrollbars">
+            <enum name="vertical" value="1"/>
+            <enum name="horizontal" value="0"/>
+            <enum name="none" value="2"/>
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="Banner">
+        <attr name="delay_time" format="integer" />
+        <attr name="scroll_time" format="integer" />
+        <attr name="is_auto_play" format="boolean" />
+        <attr name="title_background" format="color|reference" />
+        <attr name="title_textcolor" format="color" />
+        <attr name="title_textsize" format="dimension" />
+        <attr name="title_height" format="dimension" />
+        <attr name="indicator_width" format="dimension" />
+        <attr name="indicator_height" format="dimension" />
+        <attr name="indicator_margin" format="dimension" />
+        <attr name="indicator_drawable_selected" format="reference" />
+        <attr name="indicator_drawable_unselected" format="reference" />
+        <attr name="layout_id" format="reference"/>
+        <attr name="image_scale_type" format="enum">
+            <enum name="center" value="0" />
+            <enum name="center_crop" value="1" />
+            <enum name="center_inside" value="2" />
+            <enum name="fit_center" value="3" />
+            <enum name="fit_end" value="4" />
+            <enum name="fit_start" value="5" />
+            <enum name="fit_xy" value="6" />
+            <enum name="matrix" value="7" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="FlikerProgressBar">
+        <attr name="textSize" format="dimension"/>
+        <attr name="loadingColor" format="color"/>
+        <attr name="stopColor" format="color"/>
+        <attr name="finishColor" format="color"/>
+        <attr name="radius" format="dimension"/>
+        <attr name="borderWidth" format="dimension"/>
+    </declare-styleable>
+
+
+
+</resources>

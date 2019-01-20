@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<litepal>
+    <dbname value="zjjfpos"></dbname>
+    <version value="1"></version>
+    <list>
+        <mapping class="com.zjjf.autopos.bean.UserInfo"></mapping>
+        <mapping class="com.zjjf.autopos.bean.ResourcesBean"></mapping>
+        <mapping class="com.zjjf.autopos.bean.GoodsBase"></mapping>
+        <!--<mapping class="com.zjjf.zjjfpos.mvp.bean.StoreDetailBean"></mapping>-->
+    </list>
+
+</litepal>

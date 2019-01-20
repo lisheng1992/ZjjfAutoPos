@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.93"
+        android:background="@drawable/welcome" />
+
+    <com.zjjf.autopos.custemview.RxProgressBar
+        android:id="@+id/rx_bar"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginLeft="60dp"
+        android:layout_marginRight="60dp"
+        android:layout_weight="0.07"
+        app:loadingColor="@color/color_0099cc"
+        app:stopColor="@color/color_0099cc"
+        app:textSize="15sp" />
+
+
+</LinearLayout>

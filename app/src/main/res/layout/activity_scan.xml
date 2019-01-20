@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.zjjf.autopos.ui.ScanActivity"
+    android:background="@color/black">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:background="@drawable/bg">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/log_small"
+                android:layout_centerVertical="true"/>
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/cancle"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textSize="12sp"
+                    android:textColor="@color/color_cccccc"
+                    android:text="取消交易"/>
+            </FrameLayout>
+        </RelativeLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp">
+
+            <LinearLayout
+                android:id="@+id/ll_empty_goods"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:background="@drawable/white_radius"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:gravity="center_horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="30sp"
+                    android:textStyle="bold"
+                    android:text="请扫入商品条码"
+                    android:textColor="@color/black"
+                    android:layout_marginTop="20dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:text="将条形码对准扫码口，逐次扫描所有商品"
+                    android:textColor="@color/grey_999999"
+                    android:layout_marginTop="10dp"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/scan_goods_hint"
+                    android:layout_marginTop="50dp"/>
+
+            </LinearLayout>
+
+            <easyrecyclerview.EasyRecyclerView
+                android:id="@+id/erv_goods_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="none"
+                android:visibility="gone"/>
+
+        </FrameLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp">
+
+            <FrameLayout
+                android:id="@+id/fl_input_barcode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/cancle"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:textSize="12sp"
+                    android:text="输入条形码"
+                    android:drawableLeft="@drawable/keyboard"
+                    android:drawablePadding="5dp"/>
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/tv_big_bag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:text="大号袋"
+                android:drawableLeft="@drawable/select_default"
+                android:drawablePadding="5dp"
+                android:gravity="center_vertical"/>
+
+            <TextView
+                android:id="@+id/tv_sall_bag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                android:layout_toLeftOf="@+id/tv_big_bag"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="20dp"
+                android:text="小号袋"
+                android:drawableLeft="@drawable/select_default"
+                android:drawablePadding="5dp"
+                android:gravity="center_vertical"/>
+
+        </RelativeLayout>
+        
+    </LinearLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:background="@color/black"
+        android:paddingLeft="30dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:layout_gravity="center_vertical"
+            android:layout_centerVertical="true"
+            android:text="当前购物车为空，请扫码或手动输入商品码"/>
+
+    </FrameLayout>
+
+</LinearLayout>
