@@ -27,6 +27,8 @@ public class GoodsBean implements Serializable{
      */
     private String no;
 
+    private String imgUrl;
+
     /**
      * 商品规格
      */
@@ -259,6 +261,7 @@ public class GoodsBean implements Serializable{
                 ", goodsNum=" + goodsNum +
                 ", name='" + name + '\'' +
                 ", no='" + no + '\'' +
+                ", imgUrl='" + imgUrl + '\'' +
                 ", spec='" + spec + '\'' +
                 ", barcode='" + barcode + '\'' +
                 ", pkg='" + pkg + '\'' +
@@ -274,4 +277,13 @@ public class GoodsBean implements Serializable{
                 ", totalPrice=" + totalPrice +
                 '}';
     }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
+
 }

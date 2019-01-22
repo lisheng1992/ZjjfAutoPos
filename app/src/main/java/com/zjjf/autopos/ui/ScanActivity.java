@@ -3,12 +3,15 @@ package com.zjjf.autopos.ui;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.socks.library.KLog;
 import com.zjjf.autopos.R;
@@ -56,9 +59,9 @@ public class ScanActivity extends BaseActivity implements View.OnClickListener, 
         DividerDecoration itemDecoration = new DividerDecoration(getResources().getColor(R.color.transparent), dip2px(this, 15f), 0, 0);
         itemDecoration.setDrawLastItem(true);
         erv_goods_list.addItemDecoration(itemDecoration);
-        for (int i = 0;i < 10;i++){
-            goodsList.add(new GoodsBean());
-        }
+//        for (int i = 0;i < 10;i++){
+//            goodsList.add(new GoodsBean());
+//        }
         mGoodslistAdapter = new RecyclerArrayAdapter<GoodsBean>(this) {
             @Override
             public BaseViewHolder OnCreateViewHolder(ViewGroup parent, int viewType) {
@@ -101,7 +104,35 @@ public class ScanActivity extends BaseActivity implements View.OnClickListener, 
                                     et_bar_code.setText("");
                                 }
                                 if (response.size() == 0) {
-
+                                    Toast toast = new Toast(ScanActivity.this);
+                                    View view = LayoutInflater.from(ScanActivity.this).inflate(R.layout.custom_toast,null);
+                                    toast.setView(view);
+                                    toast.setGravity(Gravity.CENTER,0,0);
+                                    toast.setDuration(Toast.LENGTH_SHORT);
+                                    toast.show();
+                                } else if (response.size() == 1) {
+                                    ll_empty_goods.setVisibility(View.GONE);
+                                    int i = 0;
+                                    boolean isExist = false;
+                                    for (GoodsBean goodsBean : goodsList) {
+                                        if (goodsBean.getGoodsId().equals(response.get(0).getGoodsId())) {
+                                            goodsBean.setGoodsNum(goodsBean.getGoodsNum() + 1);
+                                            goodsBean.setSellingPrice(response.get(0).getSellingPrice());
+                                            goodsBean.setName(response.get(0).getName());
+                                            goodsBean.setPkg(response.get(0).getPkg());
+                                            goodsBean.setTotalPrice(goodsBean.getGoodsNum() * goodsBean.getSellingPrice());
+                                            goodsList.remove(i);
+                                            goodsList.add(0, goodsBean);
+                                            mGoodslistAdapter.notifyDataSetChanged();
+                                            isExist = true;
+                                            break;
+                                        }
+                                        i++;
+                                    }
+                                    if (!isExist) {
+                                        goodsList.add(0, goodsList.get(0));
+                                        mGoodslistAdapter.notifyDataSetChanged();
+                                    }
                                 }
                             }
 

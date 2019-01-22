@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="800dp"
+    android:layout_height="420dp"
+    android:background="@drawable/toast_sp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/color_eeeeee"
+        android:textSize="52dp"
+        android:textStyle="bold"
+        android:layout_gravity="center"
+        android:text="商品码不对或扫码太快"/>
+</FrameLayout>
