@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="400dp"
+    android:background="@drawable/white_radius">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/grey_333333"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:text="确认要删除此商品？"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="140dp"/>
+
+    <Button
+        android:id="@+id/delete_goods_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/dialog_cancel_selector"
+        android:textSize="30sp"
+        android:textColor="@color/grey_666666"
+        android:gravity="center"
+        android:text="取消"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="70dp"
+        android:layout_marginBottom="50dp"/>
+
+    <Button
+        android:id="@+id/delete_goods_sure"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/dialog_sure_selector"
+        android:textSize="30sp"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:text="取消"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="70dp"
+        android:layout_marginBottom="50dp"/>
+
+</RelativeLayout>

@@ -1,5 +1,6 @@
 package com.zjjf.autopos.presenter;
 
+import com.socks.library.KLog;
 import com.zjjf.autopos.bean.GoodsBase;
 import com.zjjf.autopos.bean.GoodsBean;
 import com.zjjf.autopos.bean.GoodsListBean;
@@ -61,7 +62,7 @@ public class QueryGoods {
                 Map<String, String> params = new HashMap<>();
                 params.put("productStatus", "1");
                 params.put("searchWord", keyWords);
-                Novate.getDefault().executeJson(Constant.URL_GOODS_LIST + "?page=0&size=" + Integer.MAX_VALUE, params, new Novate.ResponseCallBack<GoodsListBean>() {
+                Novate.getDefault().executeJson(Constant.URL_GOODS_LIST + "?page=0&size=" + Integer.MAX_VALUE, params, new Novate.ResponseCallBack<BaseResponse<GoodsListBean>>() {
                     @Override
                     public void onStart() {
 
@@ -74,12 +75,12 @@ public class QueryGoods {
 
                     @Override
                     public void onError(Throwable e) {
-
+                        KLog.e(e);
                     }
 
                     @Override
-                    public void onSuccee(GoodsListBean response) {
-                        for (GoodsListBean.ContentBean goodsBase : response.getContent()) {
+                    public void onSuccee(BaseResponse<GoodsListBean> response) {
+                        for (GoodsListBean.ContentBean goodsBase : response.getMsg().getContent()) {
                             GoodsBean goodsBean = new GoodsBean(goodsBase.getProducts().get(0).getmId(), 1, goodsBase.getName(), goodsBase.getNo(),
                                     goodsBase.getSpec(), goodsBase.getBarcode(), goodsBase.getPkg(), goodsBase.getBrand(),
                                     goodsBase.getType(), goodsBase.getSecondCategory().getmId(), goodsBase.getSecondCategory().getParentId(),

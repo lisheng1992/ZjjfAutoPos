@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 
 import com.squareup.leakcanary.RefWatcher;
@@ -34,17 +35,19 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     public abstract void initEvent();
 
+    protected InputMethodManager methodManager;
     private ProgressDialog mProgressDialog;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        hideSystemUI();
+        //hideSystemUI();
         int layoutId = getLayoutId();
         setContentView(layoutId);
         initViews();
         initEvent();
+        methodManager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
         //添加activity到栈顶
-        ActManager.getInstances().add(this);
+        //ActManager.getInstances().add(this);
     }
 
     void hideSystemUI() {
@@ -53,7 +56,6 @@ public abstract class BaseActivity extends AppCompatActivity {
                         | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                         | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
-                        | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
                         | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
                         | View.SYSTEM_UI_FLAG_LOW_PROFILE);
     }
@@ -133,6 +135,15 @@ public abstract class BaseActivity extends AppCompatActivity {
         recyclerView.setRefreshingColorResources(R.color.color_0099cc, R.color.color_ff8800, R.color.color_669900);
     }
 
+    //隐藏键盘, 并且不再使用
+    public void hideInputMethodNeverUse() {
+        methodManager.hideSoftInputFromWindow(getWindow().peekDecorView().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+    }
+
+    //隐藏输入法
+    public void hideInputMethod(View v) {
+        methodManager.hideSoftInputFromWindow(v.getApplicationWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
+    }
 //
 // private void listenScreen(){
 //        final IntentFilter filter = new IntentFilter();

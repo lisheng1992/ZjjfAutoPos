@@ -1,7 +1,9 @@
 package com.zjjf.autopos.ui;
 
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -47,6 +49,46 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
     @Override
     public void initEvent() {
         bt_login.setOnClickListener(this);
+        et_user_name.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (TextUtils.isEmpty(et_user_name.getText())) {
+                    et_user_name.setBackgroundResource(R.drawable.eee_white_sp);
+                } else {
+                    et_user_name.setBackgroundResource(R.drawable.login_et_sp);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        et_user_password.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (TextUtils.isEmpty(et_user_password.getText())) {
+                    et_user_password.setBackgroundResource(R.drawable.eee_white_sp);
+                } else {
+                    et_user_password.setBackgroundResource(R.drawable.login_et_sp);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
     @Override
@@ -58,11 +100,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.bt_login:
-                showProgressDialog();
                 final String userName = et_user_name.getText().toString().trim();
                 final String password = et_user_password.getText().toString().trim();
                 if (NetworkUtil.isNetworkAvailable()) {
                     if (checkLogin(userName,password)) {
+                        showProgressDialog();
                         Map<String,Object> params = new HashMap<>();
                         params.put("username","aaa");
                         params.put("password",SecurityUtil.md5_32Bit("111111"));

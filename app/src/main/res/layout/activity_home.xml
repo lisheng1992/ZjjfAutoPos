@@ -12,50 +12,50 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="43dp"
-        android:src="@drawable/log_big" />
+        android:layout_marginTop="220dp"
+        android:background="@drawable/log_big" />
     <TextView
         android:id="@+id/tv_click"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="点击 “开始自助结算”"
         android:textColor="@color/grey_666666"
-        android:layout_marginLeft="80dp"
-        android:textSize="18sp"
+        android:layout_marginLeft="190dp"
+        android:textSize="24sp"
         android:drawableLeft="@drawable/click"
         android:drawablePadding="5dp"
         android:layout_below="@+id/iv_log"
         android:gravity="center"
-        android:layout_marginTop="30dp"/>
+        android:layout_marginTop="130dp"/>
 
     <TextView
         android:id="@+id/tv_scan"
-        android:layout_width="230dp"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/tv_click"
         android:layout_alignStart="@+id/tv_click"
         android:layout_below="@+id/tv_click"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="100dp"
         android:drawableLeft="@drawable/scan"
         android:drawablePadding="5dp"
         android:text="扫描口扫描商品条形码将商品加入购物车"
         android:gravity="center_vertical"
         android:textColor="@color/grey_666666"
-        android:textSize="18sp" />
+        android:textSize="24sp" />
 
     <TextView
-        android:layout_width="230dp"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/tv_click"
         android:layout_alignStart="@+id/tv_click"
         android:layout_below="@+id/tv_scan"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="100dp"
         android:drawableLeft="@drawable/scan"
         android:drawablePadding="5dp"
         android:text="确认订单并扫码支付等候自动开门离店"
         android:gravity="center_vertical"
         android:textColor="@color/grey_666666"
-        android:textSize="18sp" />
+        android:textSize="24sp" />
 
     <Button
         android:id="@+id/bt_start_scan"
@@ -64,7 +64,7 @@
         android:background="@drawable/go_order_selector"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="100dp"/>
+        android:layout_marginBottom="150dp"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -74,5 +74,5 @@
         android:textColor="@color/color_6daa4b"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="80dp" />
+        android:layout_marginBottom="110dp" />
 </RelativeLayout>

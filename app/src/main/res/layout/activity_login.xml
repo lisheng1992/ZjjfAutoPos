@@ -5,18 +5,50 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.zjjf.autopos.ui.LoginActivity"
+    android:gravity="center_horizontal"
     android:orientation="vertical">
 
+    
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/log_big"
+        android:layout_marginTop="220dp"/>
     <EditText
         android:id="@+id/et_user_name"
+    android:layout_marginTop="160dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="120dp"
+        android:layout_marginLeft="140dp"
+        android:layout_marginRight="140dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="70dp"
+        android:textSize="48sp"
+        android:textColor="@color/black"
+        android:background="@drawable/eee_white_sp"/>
+
     <EditText
         android:id="@+id/et_user_password"
+    android:layout_marginTop="50dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="120dp"
+        android:layout_marginLeft="140dp"
+        android:layout_marginRight="140dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="70dp"
+        android:textSize="48sp"
+        android:textColor="@color/black"
+        android:background="@drawable/eee_white_sp"/>
+
     <Button
         android:id="@+id/bt_login"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/go_order_selector"
+        android:textColor="@color/white"
+        android:textSize="48sp"
+        android:gravity="center"
+    android:layout_marginTop="160dp"
+        android:text="确定"/>
+
 </LinearLayout>

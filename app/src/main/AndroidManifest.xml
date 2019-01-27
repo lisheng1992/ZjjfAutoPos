@@ -26,7 +26,7 @@
         </activity>
         <activity android:name=".ui.InitializeActivity"/>
         <activity android:name=".ui.HomeActivity" />
-        <activity android:name=".ui.ScanActivity"/>
+        <activity android:name=".ui.ScanActivity" />
     </application>
 
 </manifest>

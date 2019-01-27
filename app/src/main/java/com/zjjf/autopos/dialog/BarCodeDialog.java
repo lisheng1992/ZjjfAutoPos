@@ -108,6 +108,7 @@ public class BarCodeDialog extends Dialog implements View.OnClickListener {
                         mBarCodeCallback.barCodeCallback(text);
                     }
                 }
+                dismiss();
                 break;
              default:
                  break;

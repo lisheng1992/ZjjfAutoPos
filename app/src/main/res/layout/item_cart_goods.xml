@@ -47,7 +47,7 @@
                 android:textColor="@color/color_6daa4b"
                 android:text="第二杯半价"
                 android:layout_below="@+id/tv_goods_name"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 android:background="@drawable/bar_code_sp"
                 android:padding="5dp"/>
             <FrameLayout
