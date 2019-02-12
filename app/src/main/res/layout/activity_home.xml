@@ -57,16 +57,25 @@
         android:textColor="@color/grey_666666"
         android:textSize="24sp" />
 
-    <Button
+    <FrameLayout
         android:id="@+id/bt_start_scan"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/go_order_selector"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="150dp"/>
+        android:layout_marginBottom="150dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textSize="48sp"
+            android:text="开始自助结算"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="30dp"/>
+    </FrameLayout>
 
-    <TextView
+    <!--<TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="我要在线选购"
@@ -74,5 +83,5 @@
         android:textColor="@color/color_6daa4b"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="110dp" />
+        android:layout_marginBottom="110dp" />-->
 </RelativeLayout>

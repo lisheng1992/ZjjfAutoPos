@@ -7,6 +7,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 
 import com.zjjf.autopos.R;
 import com.zjjf.autopos.bean.ResourcesBean;
@@ -32,7 +33,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
     private static final String TAG = "LoginActivity";
 
     private EditText et_user_name,et_user_password;
-    private Button bt_login;
+    private FrameLayout bt_login;
 
     @Override
     public int getLayoutId() {

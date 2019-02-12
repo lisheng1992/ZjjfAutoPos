@@ -24,9 +24,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.InitializeActivity"/>
+        <activity android:name=".ui.InitializeActivity" />
         <activity android:name=".ui.HomeActivity" />
         <activity android:name=".ui.ScanActivity" />
+        <activity android:name=".ui.PayActivity"></activity>
     </application>
 
 </manifest>

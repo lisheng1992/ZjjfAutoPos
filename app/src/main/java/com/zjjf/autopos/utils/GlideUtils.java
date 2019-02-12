@@ -15,6 +15,7 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.zjjf.autopos.R;
 
 /**
  * Created by yekai on 17-5-4.
@@ -78,7 +79,7 @@ public class GlideUtils {
 
     //设置缓存策略
     public static void loadImageViewDiskCache(Context mContext, String path, ImageView mImageView) {
-        Glide.with(mContext).load(path).diskCacheStrategy(DiskCacheStrategy.ALL).into(mImageView);
+        Glide.with(mContext).load(path).diskCacheStrategy(DiskCacheStrategy.ALL).error(R.drawable.null_img).into(mImageView);
     }
 
     /**

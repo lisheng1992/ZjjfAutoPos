@@ -113,7 +113,7 @@ public class Constant {
     /**生成支付订单*/
     public static final String URL_CREATE_ORDER = CONTEXTPATH + "api/order/getpayurl";
     /**根据订单号查询订单信息*/
-    public static final String URL_QUERY_ORDERINFO_BY_ORDERID = CONTEXTPATH + "api/order/getorderinfobyorderno?orderNo=";
+    public static final String URL_QUERY_ORDERINFO_BY_ORDERID = CONTEXTPATH + "api/order/getorderinfobyorderno";
     /**退款订单*/
     public static final String URL_ORDER_REFUND = CONTEXTPATH + "api/order/refund";
     /**查询支付结果*/

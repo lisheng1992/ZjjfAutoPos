@@ -12,6 +12,7 @@ import android.view.inputmethod.InputMethodManager;
 
 
 import com.squareup.leakcanary.RefWatcher;
+import com.umeng.message.PushAgent;
 import com.zjjf.autopos.R;
 import com.zjjf.autopos.ZjjfPosApplication;
 import com.zjjf.autopos.utils.ActManager;
@@ -43,6 +44,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         //hideSystemUI();
         int layoutId = getLayoutId();
         setContentView(layoutId);
+        PushAgent.getInstance(this).onAppStart();
         initViews();
         initEvent();
         methodManager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);

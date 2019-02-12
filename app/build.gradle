@@ -37,7 +37,15 @@ dependencies {
     compile 'com.github.zhaokaiqiang.klog:library:1.6.0'
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'org.litepal.android:core:1.5.1'
+    compile 'com.google.zxing:core:3.3.0'
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.1'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
     testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
+
+    //PushSDK必须依赖基础组件库，所以需要加入对应依赖
+    implementation 'com.umeng.umsdk:common:1.5.4'
+    //PushSDK必须依赖utdid库，所以需要加入对应依赖
+    implementation 'com.umeng.umsdk:utdid:1.1.5.3'
+    //PushSDK
+    implementation 'com.umeng.umsdk:push:5.0.2'
 }

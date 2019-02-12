@@ -45,6 +45,7 @@
                         android:layout_height="wrap_content"
                         android:src="@drawable/cancle"/>
                     <TextView
+                        android:id="@+id/tv_count_down"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -72,7 +73,7 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
                 android:gravity="center_horizontal"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -165,7 +166,7 @@
         </RelativeLayout>
         
     </LinearLayout>
-    <RelativeLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:background="@color/black"
@@ -176,73 +177,80 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/white"
-            android:textSize="24sp"
-            android:layout_centerVertical="true"
-            android:text="当前购物车为空，请扫码或手动输入商品码"
-            android:visibility="gone"/>
+            android:textSize="30sp"
+            android:layout_gravity="center_vertical"
+            android:text="当前购物车为空，请扫码或手动输入商品码" />
 
-        <LinearLayout
-            android:id="@+id/ll_all_price"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_centerVertical="true">
-
-            <TextView
-                android:id="@+id/"
+        <RelativeLayout
+            android:id="@+id/rl_order"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/black"
+            android:visibility="gone">
+            <LinearLayout
+                android:id="@+id/ll_all_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="36sp"
-                android:textColor="@color/color_6daa4b"
+                android:orientation="horizontal"
+                android:layout_centerVertical="true">
+
+                <TextView
+                    android:id="@+id/tv_sell_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="36sp"
+                    android:textColor="@color/color_6daa4b"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_all_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="@color/color_cccccc"
+                    android:layout_marginLeft="10dp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_below="@+id/ll_all_price">
+
+                <TextView
+                    android:id="@+id/tv_discard_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="24sp"
+                    android:textColor="@color/color_cccccc"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_discounts_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="24sp"
+                    android:textColor="@color/color_cccccc"
+                    android:layout_marginLeft="10dp"/>
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/bt_balance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/sure_order_selector"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
                 android:textStyle="bold"
-                android:text="36.36"/>
+                android:textSize="32sp"
+                android:text="确认结算"
+                android:textColor="@color/white"
+                android:gravity="center"/>
+        </RelativeLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:textColor="@color/color_cccccc"
-                android:text="（共6件）"
-                android:layout_marginLeft="10dp"/>
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_below="@+id/ll_all_price">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="24sp"
-                android:textColor="@color/color_cccccc"
-                android:textStyle="bold"
-                android:text="36.36"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:textColor="@color/color_cccccc"
-                android:text="（共6件）"
-                android:layout_marginLeft="10dp"/>
-
-        </LinearLayout>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/sure_order_selector"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:textStyle="bold"
-            android:textSize="32sp"
-            android:text="确认结算"
-            android:textColor="@color/white"
-            android:gravity="center"/>
-
-    </RelativeLayout>
+    </FrameLayout>
 
 </LinearLayout>

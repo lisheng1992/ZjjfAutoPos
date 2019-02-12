@@ -328,6 +328,17 @@ abstract public class RecyclerArrayAdapter<T> extends RecyclerView.Adapter<BaseV
         if (mNotifyOnChange) notifyItemInserted(headers.size()+getCount());
         log("add notifyItemInserted "+(headers.size()+getCount()));
     }
+
+    public void add(int position,T object) {
+        if (mEventDelegate!=null)mEventDelegate.addData(object == null ? 0 : 1);
+        if (object!=null){
+            synchronized (mLock) {
+                mObjects.add(position,object);
+            }
+        }
+        if (mNotifyOnChange) notifyItemInserted(position);
+        //log("add notifyItemInserted "+(headers.size()+getCount()));
+    }
     /**
      * Adds the specified Collection at the end of the array.
      *

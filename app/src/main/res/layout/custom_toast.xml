@@ -5,6 +5,7 @@
     android:background="@drawable/toast_sp">
 
     <TextView
+        android:id="@+id/tv_hint"
         android:layout_width="500dp"
         android:layout_height="360dp"
         android:textColor="@color/color_eeeeee"
