@@ -1,6 +1,5 @@
 package com.zjjf.autopos.ui;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Handler;
@@ -21,7 +20,7 @@ import com.zjjf.autopos.network.Novate;
 import com.zjjf.autopos.presenter.QueryPayStatus;
 import com.zjjf.autopos.utils.DateUtils;
 import com.zjjf.autopos.utils.QRCodeUtil;
-import com.zjjf.autopos.utils.ToastUtils;
+import com.zjjf.autopos.utils.SceneUtil;
 
 public class PayActivity extends BaseActivity implements Novate.ResponseCallBack<PayCallbackBean> {
 
@@ -94,10 +93,9 @@ public class PayActivity extends BaseActivity implements Novate.ResponseCallBack
     }
 
 
-    @SuppressLint("MissingSuperCall")
     @Override
     public void onStart() {
-
+        super.onStart();
     }
 
     @Override
@@ -107,25 +105,47 @@ public class PayActivity extends BaseActivity implements Novate.ResponseCallBack
 
     @Override
     public void onError(Throwable e) {
-
+        payError();
     }
 
     @Override
     public void onSuccee(PayCallbackBean response) {
         if (response.getPayStatus() == 2) {
-            Toast toast = new Toast(PayActivity.this);
-            View view = LayoutInflater.from(PayActivity.this).inflate(R.layout.custom_toast,null);
-            TextView textView = view.findViewById(R.id.tv_hint);
-            textView.setText("支付异常，请重新扫码支付");
-            toast.setView(view);
-            toast.setGravity(Gravity.CENTER,0,0);
-            toast.setDuration(Toast.LENGTH_SHORT);
-            toast.show();
+            payError();
+        } else if (response.getPayStatus() == 9) {
+            Bundle bundle = new Bundle();
+            bundle.putInt("NUMBER",goodsNum);
+            bundle.putDouble("needPay",needPay);
+            bundle.putDouble("totalPrice",totalPrice);
+            bundle.putDouble("discountsPrice",discountsPrice);
+            bundle.putString("OrderNo",orderNo);
+            SceneUtil.toScene(PayActivity.this,PayProcessActivity.class,bundle);
+        } else if (response.getPayStatus() == 0) {
+            mHandler.sendEmptyMessageDelayed(100,1000);
+        } else if (response.getPayStatus() == 1) {
+            Bundle bundle = new Bundle();
+            bundle.putInt("NUMBER",goodsNum);
+            bundle.putDouble("needPay",needPay);
+            bundle.putDouble("totalPrice",totalPrice);
+            bundle.putDouble("discountsPrice",discountsPrice);
+            bundle.putString("OrderNo",orderNo);
+            SceneUtil.toScene(PayActivity.this,PaySucceedActivity.class,bundle);
         }
     }
 
     @Override
     public void onFail(BaseResponse baseResponse) {
+        payError();
+    }
 
+    private void payError() {
+        Toast toast = new Toast(PayActivity.this);
+        View view = LayoutInflater.from(PayActivity.this).inflate(R.layout.custom_toast,null);
+        TextView textView = view.findViewById(R.id.tv_hint);
+        textView.setText("支付异常，请重新扫码支付");
+        toast.setView(view);
+        toast.setGravity(Gravity.CENTER,0,0);
+        toast.setDuration(Toast.LENGTH_SHORT);
+        toast.show();
     }
 }

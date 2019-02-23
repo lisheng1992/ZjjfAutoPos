@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -33,11 +34,13 @@ import com.zjjf.autopos.bean.PromotionBean;
 import com.zjjf.autopos.bean.PromotionListBean;
 import com.zjjf.autopos.bean.QRcodeBean;
 import com.zjjf.autopos.common.Constant;
+import com.zjjf.autopos.custemview.EnhanceEditText;
 import com.zjjf.autopos.dialog.BarCodeDialog;
 import com.zjjf.autopos.dialog.GoodsDetailsDialog;
 import com.zjjf.autopos.network.BaseResponse;
 import com.zjjf.autopos.network.Novate;
 import com.zjjf.autopos.presenter.QueryGoods;
+import com.zjjf.autopos.utils.BarcodeEditTextHelper;
 import com.zjjf.autopos.utils.DateUtils;
 import com.zjjf.autopos.utils.OperateSharedUtils;
 import com.zjjf.autopos.utils.SceneUtil;
@@ -62,7 +65,7 @@ public class ScanActivity extends BaseActivity implements View.OnClickListener, 
 
     private EasyRecyclerView erv_goods_list;
     private LinearLayout ll_empty_goods;
-    private EditText et_bar_code;
+    private EnhanceEditText et_bar_code;
     private TextView tv_sell_price,tv_all_number,tv_discard_price,tv_discounts_price,tv_count_down;
     private RelativeLayout rl_order;
     private Button bt_balance;
@@ -70,6 +73,10 @@ public class ScanActivity extends BaseActivity implements View.OnClickListener, 
 
     private QueryGoods mQueryGoods;
     private ExitDownTimer mExitDownTimer;
+    private ClickExitDownTimer mClickExitDownTimer;
+    private BarcodeEditTextHelper barcodeEditTextHelper;
+
+    private FrameLayout fl_cancel;
 
     @Override
     public int getLayoutId() {
@@ -89,12 +96,21 @@ public class ScanActivity extends BaseActivity implements View.OnClickListener, 
         erv_goods_list = findViewById(R.id.erv_goods_list);
         rl_order = findViewById(R.id.rl_order);
         bt_balance = findViewById(R.id.bt_balance);
+        fl_cancel = findViewById(R.id.fl_cancel);
         et_bar_code.setShowSoftInputOnFocus(false);
         getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN
                         | WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         et_bar_code.requestFocus();
+        barcodeEditTextHelper = new BarcodeEditTextHelper(this, et_bar_code, new BarcodeEditTextHelper.AfterTextChanged() {
+            @Override
+            public void afterTextChanged(String barcode) {
+                queryGoods(barcode);
+                barcodeEditTextHelper.clearBarcode();
+            }
+        });
         findViewById(R.id.fl_input_barcode).setOnClickListener(this);
+        fl_cancel.setOnClickListener(this);
         bt_balance.setOnClickListener(this);
         erv_goods_list.setLayoutManager(new LinearLayoutManager(this));
         DividerDecoration itemDecoration = new DividerDecoration(getResources().getColor(R.color.transparent), dip2px(this, 15f), 0, 0);
@@ -185,20 +201,20 @@ public class ScanActivity extends BaseActivity implements View.OnClickListener, 
     public void initEvent() {
         mExitDownTimer = new ExitDownTimer(1000 * 60,1000);
         mExitDownTimer.start();
-        et_bar_code.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                hideInputMethod(et_bar_code);
-                if (event != null && KeyEvent.KEYCODE_ENTER == event.getKeyCode() && event.getAction() == KeyEvent.ACTION_DOWN){
-                    String barCode = et_bar_code.getText().toString();
-                    if (!TextUtils.isEmpty(barCode)) {
-                        queryGoods(barCode);
-                    }
-                    return true;
-                }
-                return true;
-            }
-        });
+//        et_bar_code.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+//            @Override
+//            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+//                hideInputMethod(et_bar_code);
+//                if (event != null && KeyEvent.KEYCODE_ENTER == event.getKeyCode() && event.getAction() == KeyEvent.ACTION_DOWN){
+//                    String barCode = et_bar_code.getText().toString();
+//                    if (!TextUtils.isEmpty(barCode)) {
+//                        queryGoods(barCode);
+//                    }
+//                    return true;
+//                }
+//                return true;
+//            }
+//        });
 //        et_bar_code.addTextChangedListener(new TextWatcher() {
 //            @Override
 //            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -262,6 +278,12 @@ public class ScanActivity extends BaseActivity implements View.OnClickListener, 
             case R.id.bt_balance:
                 creatWXOrder();
                 creatZFBOrder();
+                break;
+            case R.id.fl_cancel:
+                CancelOrder cancelOrder = new CancelOrder(ScanActivity.this);
+                cancelOrder.show();
+                mClickExitDownTimer = new ClickExitDownTimer(1000,1000);
+                mClickExitDownTimer.start();
                 break;
             default:
                 break;
@@ -350,6 +372,25 @@ public class ScanActivity extends BaseActivity implements View.OnClickListener, 
                 CancelOrder cancelOrder = new CancelOrder(ScanActivity.this);
                 cancelOrder.show();
             }
+            if (tv_dialog_title != null) {
+                tv_dialog_title.setText("确认要取消交易吗（"+millisUntilFinished/1000+"秒）？");
+            }
+        }
+
+        @Override
+        public void onFinish() {
+            ScanActivity.this.finish();
+        }
+    }
+
+    class ClickExitDownTimer extends CountDownTimer {
+
+        public ClickExitDownTimer(long millisInFuture, long countDownInterval) {
+            super(millisInFuture, countDownInterval);
+        }
+
+        @Override
+        public void onTick(long millisUntilFinished) {
             if (tv_dialog_title != null) {
                 tv_dialog_title.setText("确认要取消交易吗（"+millisUntilFinished/1000+"秒）？");
             }
@@ -482,6 +523,7 @@ public class ScanActivity extends BaseActivity implements View.OnClickListener, 
                 public void onClick(View v) {
                     dismiss();
                     mExitDownTimer.start();
+                    mClickExitDownTimer.cancel();
                 }
             });
             delete_goods_sure.setOnClickListener(new View.OnClickListener() {
@@ -629,4 +671,15 @@ public class ScanActivity extends BaseActivity implements View.OnClickListener, 
         createOrderBean.setDetailList(getCommonList());
         return createOrderBean;
     }
- }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mExitDownTimer != null) {
+            mExitDownTimer.cancel();
+        }
+        if (mClickExitDownTimer != null) {
+            mClickExitDownTimer.cancel();
+        }
+    }
+}

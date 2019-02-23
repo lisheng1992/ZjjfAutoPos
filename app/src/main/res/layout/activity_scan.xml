@@ -20,7 +20,7 @@
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp">
 
-            <EditText
+            <com.zjjf.autopos.custemview.EnhanceEditText
                 android:id="@+id/et_bar_code"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -36,6 +36,7 @@
                     android:src="@drawable/log_small"
                     android:layout_centerVertical="true"/>
                 <FrameLayout
+                    android:id="@+id/fl_cancel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"

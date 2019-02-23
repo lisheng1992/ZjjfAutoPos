@@ -14,8 +14,8 @@ public class Constant {
     /**
      * 服务器IP
      */
-    public static final String HOST = "www.jfun365.cn";
-    //public static final String HOST = "192.168.1.10";
+   // public static final String HOST = "www.jfun365.cn";
+    public static final String HOST = "192.168.1.10";
 //     public static final String HOST = "192.168.1.188";
     //public static final String HOST = "112.74.196.61";
     /**
@@ -27,7 +27,7 @@ public class Constant {
      */
     //public static final String PORT = ":8182/";
     //public static final String PORT = ":8185/";
-    public static final String PORT = "/";
+    public static final String PORT = "81/";
 
     /**
      * 工程名

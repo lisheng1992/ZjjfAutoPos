@@ -37,4 +37,5 @@
     <color name="color_FF7751">#FF7751</color>
     <color name="color_F2F2F2">#F2F2F2</color>
     <color name="color_e6e6e6">#e6e6e6</color>
+    <color name="inside_color">#d1cdcd</color>
 </resources>

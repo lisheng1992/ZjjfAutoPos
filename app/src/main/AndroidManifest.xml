@@ -25,9 +25,12 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.InitializeActivity" />
-        <activity android:name=".ui.HomeActivity" />
+        <activity android:name=".ui.HomeActivity"
+            android:launchMode="singleTask"/>
         <activity android:name=".ui.ScanActivity" />
-        <activity android:name=".ui.PayActivity"></activity>
+        <activity android:name=".ui.PayActivity" />
+        <activity android:name=".ui.PayProcessActivity"></activity>
+       <activity android:name=".ui.PaySucceedActivity"></activity>
     </application>
 
 </manifest>
