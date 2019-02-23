@@ -2,20 +2,19 @@ package com.zjjf.autopos.ui;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,7 +26,7 @@ import android.widget.Toast;
 
 import com.socks.library.KLog;
 import com.zjjf.autopos.R;
-import com.zjjf.autopos.adapter.AddGoodsHolder;
+import com.zjjf.autopos.adapter.GoodsListAdapter;
 import com.zjjf.autopos.bean.CreateOrderBean;
 import com.zjjf.autopos.bean.GoodsBean;
 import com.zjjf.autopos.bean.PromotionBean;
@@ -47,29 +46,31 @@ import com.zjjf.autopos.utils.SceneUtil;
 import com.zjjf.autopos.utils.SystemUtils;
 import com.zjjf.autopos.utils.ToastUtils;
 
-import org.w3c.dom.Text;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-import easyrecyclerview.EasyRecyclerView;
-import easyrecyclerview.adapter.BaseViewHolder;
-import easyrecyclerview.adapter.RecyclerArrayAdapter;
 import easyrecyclerview.decoration.DividerDecoration;
 
 import static com.zjjf.autopos.utils.UIUtils.dip2px;
 
-public class ScanActivity extends BaseActivity implements View.OnClickListener, BarCodeDialog.BarCodeCallback, AddGoodsHolder.GoodsCallback {
+public class ScanActivity extends BaseActivity implements View.OnClickListener, BarCodeDialog.BarCodeCallback, GoodsListAdapter.GoodsCallback {
 
-    private EasyRecyclerView erv_goods_list;
+    private static final int SMALL_BAG = 010203;
+    private static final int BIG_BAG = 010204;
+    private int bagType = SMALL_BAG;
+
+    private RecyclerView erv_goods_list;
     private LinearLayout ll_empty_goods;
     private EnhanceEditText et_bar_code;
     private TextView tv_sell_price,tv_all_number,tv_discard_price,tv_discounts_price,tv_count_down;
+    private TextView tv_big_bag,tv_small_bag;
     private RelativeLayout rl_order;
     private Button bt_balance;
-    private RecyclerArrayAdapter<GoodsBean> mGoodslistAdapter;
+
+    private GoodsListAdapter mGoodsListAdapter;
+    private List<GoodsBean> mGoodsBeans;
 
     private QueryGoods mQueryGoods;
     private ExitDownTimer mExitDownTimer;
@@ -77,6 +78,8 @@ public class ScanActivity extends BaseActivity implements View.OnClickListener, 
     private BarcodeEditTextHelper barcodeEditTextHelper;
 
     private FrameLayout fl_cancel;
+    private Drawable selectDefault;
+    private Drawable selectClick;
 
     @Override
     public int getLayoutId() {
@@ -97,6 +100,10 @@ public class ScanActivity extends BaseActivity implements View.OnClickListener, 
         rl_order = findViewById(R.id.rl_order);
         bt_balance = findViewById(R.id.bt_balance);
         fl_cancel = findViewById(R.id.fl_cancel);
+        tv_big_bag = findViewById(R.id.tv_big_bag);
+        tv_small_bag = findViewById(R.id.tv_small_bag);
+        tv_big_bag.setOnClickListener(this);
+        tv_small_bag.setOnClickListener(this);
         et_bar_code.setShowSoftInputOnFocus(false);
         getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN
@@ -116,15 +123,22 @@ public class ScanActivity extends BaseActivity implements View.OnClickListener, 
         DividerDecoration itemDecoration = new DividerDecoration(getResources().getColor(R.color.transparent), dip2px(this, 15f), 0, 0);
         itemDecoration.setDrawLastItem(true);
         erv_goods_list.addItemDecoration(itemDecoration);
-        mGoodslistAdapter = new RecyclerArrayAdapter<GoodsBean>(this) {
-            @Override
-            public BaseViewHolder OnCreateViewHolder(ViewGroup parent, int viewType) {
-                AddGoodsHolder addGoodsHolder = new AddGoodsHolder(parent,R.layout.item_cart_goods);
-                addGoodsHolder.setGoodsCallback(ScanActivity.this);
-                return addGoodsHolder;
-            }
-        };
-        erv_goods_list.setAdapter(mGoodslistAdapter);
+        mGoodsBeans = new ArrayList<>();
+        mGoodsListAdapter = new GoodsListAdapter(this,mGoodsBeans,this);
+        erv_goods_list.setAdapter(mGoodsListAdapter);
+//        mGoodslistAdapter = new RecyclerArrayAdapter<GoodsBean>(this) {
+//            @Override
+//            public BaseViewHolder OnCreateViewHolder(ViewGroup parent, int viewType) {
+//                AddGoodsHolder addGoodsHolder = new AddGoodsHolder(parent,R.layout.item_cart_goods);
+//                addGoodsHolder.setGoodsCallback(ScanActivity.this);
+//                return addGoodsHolder;
+//            }
+//        };
+//        erv_goods_list.setAdapter(mGoodslistAdapter);
+        //默认小号袋
+        queryBag("010203");
+        selectDefault = getResources().getDrawable(R.drawable.select_default);
+        selectClick = getResources().getDrawable(R.drawable.select_click);
     }
 
     private void queryGoods(String barCode) {
@@ -157,25 +171,31 @@ public class ScanActivity extends BaseActivity implements View.OnClickListener, 
                     toast.setDuration(Toast.LENGTH_SHORT);
                     toast.show();
                 } else if (response.size() == 1) {
+                    if (response.get(0).getSellingPrice() == 0) {
+                       ToastUtils.showShortToast(ScanActivity.this,"商品未销售，请勿购买");
+                       return;
+                    }
                     ll_empty_goods.setVisibility(View.GONE);
                     int i = 0;
                     boolean isExist = false;
-                    for (GoodsBean goodsBean : mGoodslistAdapter.getAllData()) {
+                    for (GoodsBean goodsBean :mGoodsBeans) {
                         if (goodsBean.getGoodsId().equals(response.get(0).getGoodsId())) {
                             goodsBean.setGoodsNum(goodsBean.getGoodsNum() + 1);
                             goodsBean.setSellingPrice(response.get(0).getSellingPrice());
                             goodsBean.setName(response.get(0).getName());
                             goodsBean.setPkg(response.get(0).getPkg());
                             goodsBean.setTotalPrice(goodsBean.getGoodsNum() * goodsBean.getSellingPrice());
-                            mGoodslistAdapter.remove(i);
-                            mGoodslistAdapter.add(0,goodsBean);
+                            mGoodsBeans.remove(i);
+                            mGoodsBeans.add(0,goodsBean);
+                            mGoodsListAdapter.notifyDataSetChanged();
                             isExist = true;
                             break;
                         }
                         i++;
                     }
                     if (!isExist) {
-                        mGoodslistAdapter.add(0,response.get(0));
+                        mGoodsBeans.add(0,response.get(0));
+                        mGoodsListAdapter.notifyDataSetChanged();
                         final GoodsDetailsDialog goodsDetailsDialog = new GoodsDetailsDialog(ScanActivity.this,response.get(0).getImgUrl(),
                                 response.get(0).getName(),response.get(0).getSellingPrice());
                         goodsDetailsDialog.show();
@@ -187,6 +207,39 @@ public class ScanActivity extends BaseActivity implements View.OnClickListener, 
                         },1000);
                     }
                     calculateDiscountsPrice();
+                }
+            }
+
+            @Override
+            public void onFail(BaseResponse baseResponse) {
+                dismissProgressDialog();
+            }
+        });
+    }
+
+    //010203 小号袋 010204大号袋
+    private GoodsBean bag;
+    private void queryBag(String barCode) {
+        mQueryGoods.queryGoods(barCode, new Novate.ResponseCallBack<List<GoodsBean>>() {
+            @Override
+            public void onStart() {
+                showProgressDialog();
+            }
+
+            @Override
+            public void onCompleted() {
+                dismissProgressDialog();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                dismissProgressDialog();
+            }
+
+            @Override
+            public void onSuccee(List<GoodsBean> response) {
+                if (response != null && response.size() > 0) {
+                    bag = response.get(0);
                 }
             }
 
@@ -266,7 +319,7 @@ public class ScanActivity extends BaseActivity implements View.OnClickListener, 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
-
+    CancelOrder cancelOrder;
     @Override
     public void onClick(View v) {
         switch (v.getId()){
@@ -280,10 +333,29 @@ public class ScanActivity extends BaseActivity implements View.OnClickListener, 
                 creatZFBOrder();
                 break;
             case R.id.fl_cancel:
-                CancelOrder cancelOrder = new CancelOrder(ScanActivity.this);
+                cancelOrder = new CancelOrder(ScanActivity.this);
                 cancelOrder.show();
-                mClickExitDownTimer = new ClickExitDownTimer(1000,1000);
+                if (tv_dialog_title != null) {
+                    tv_dialog_title.setText("确认要取消交易吗（10秒）？");
+                }
+                mClickExitDownTimer = new ClickExitDownTimer(10000,1000);
                 mClickExitDownTimer.start();
+                break;
+            case R.id.tv_small_bag:
+                if (bagType == BIG_BAG) {
+                    bagType = SMALL_BAG;
+                    queryBag(SMALL_BAG+"");
+                    tv_small_bag.setCompoundDrawablesWithIntrinsicBounds(selectClick,null,null,null);
+                    tv_big_bag.setCompoundDrawablesWithIntrinsicBounds(selectDefault,null,null,null);
+                }
+                break;
+            case R.id.tv_big_bag:
+                if (bagType == SMALL_BAG) {
+                    bagType = BIG_BAG;
+                    queryBag(BIG_BAG+"");
+                    tv_small_bag.setCompoundDrawablesWithIntrinsicBounds(selectDefault,null,null,null);
+                    tv_big_bag.setCompoundDrawablesWithIntrinsicBounds(selectClick,null,null,null);
+                }
                 break;
             default:
                 break;
@@ -335,27 +407,30 @@ public class ScanActivity extends BaseActivity implements View.OnClickListener, 
 
     @Override
     public void deleteGoods(int position) {
-        mGoodslistAdapter.remove(position);
+        mGoodsBeans.remove(position);
+        mGoodsListAdapter.notifyItemRemoved(position);
         calculateDiscountsPrice();
     }
 
     @Override
     public void subtractGoods(int position) {
-        GoodsBean goodsBean = mGoodslistAdapter.getItem(position);
+        GoodsBean goodsBean = mGoodsBeans.get(position);
         if (goodsBean.getGoodsNum() > 1) {
             goodsBean.setGoodsNum(goodsBean.getGoodsNum() - 1);
             goodsBean.setTotalPrice(goodsBean.getGoodsNum()*goodsBean.getSellingPrice());
-            mGoodslistAdapter.notifyItemChanged(position,goodsBean);
+            mGoodsBeans.set(position,goodsBean);
+            mGoodsListAdapter.notifyItemChanged(position);
         }
         calculateDiscountsPrice();
     }
 
     @Override
     public void addGoods(int position) {
-        GoodsBean goodsBean = mGoodslistAdapter.getItem(position);
+        GoodsBean goodsBean = mGoodsBeans.get(position);
         goodsBean.setGoodsNum(goodsBean.getGoodsNum() + 1);
         goodsBean.setTotalPrice(goodsBean.getGoodsNum()*goodsBean.getSellingPrice());
-        mGoodslistAdapter.notifyItemChanged(position,goodsBean);
+        mGoodsBeans.set(position,goodsBean);
+        mGoodsListAdapter.notifyItemChanged(position);
         calculateDiscountsPrice();
     }
 
@@ -372,8 +447,10 @@ public class ScanActivity extends BaseActivity implements View.OnClickListener, 
                 CancelOrder cancelOrder = new CancelOrder(ScanActivity.this);
                 cancelOrder.show();
             }
-            if (tv_dialog_title != null) {
-                tv_dialog_title.setText("确认要取消交易吗（"+millisUntilFinished/1000+"秒）？");
+            if (millisUntilFinished/1000 <= 10) {
+                if (tv_dialog_title != null) {
+                    tv_dialog_title.setText("确认要取消交易吗（"+millisUntilFinished/1000+"秒）？");
+                }
             }
         }
 
@@ -398,7 +475,9 @@ public class ScanActivity extends BaseActivity implements View.OnClickListener, 
 
         @Override
         public void onFinish() {
-            ScanActivity.this.finish();
+            if (cancelOrder != null) {
+                cancelOrder.dismiss();
+            }
         }
     }
 
@@ -406,7 +485,7 @@ public class ScanActivity extends BaseActivity implements View.OnClickListener, 
     private String discountDesc = "";
     private String actIds = "";
     private void calculateDiscountsPrice() {
-        if (mGoodslistAdapter.getAllData().size() == 0) {
+        if (mGoodsBeans.size() == 0) {
             ll_empty_goods.setVisibility(View.VISIBLE);
             rl_order.setVisibility(View.GONE);
             return;
@@ -447,18 +526,21 @@ public class ScanActivity extends BaseActivity implements View.OnClickListener, 
                     KLog.d(String.valueOf(rebateAmount));
                     int number = 0;
                     double price = 0;
-                    for (GoodsBean goodsBean: mGoodslistAdapter.getAllData()) {
+                    for (GoodsBean goodsBean: mGoodsBeans) {
                         number += goodsBean.getGoodsNum();
                         price += goodsBean.getTotalPrice();
                     }
                     tv_discard_price.setText(Constant.RMB+DateUtils.getOneDecimals(price));
+                    tv_discard_price.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);//中划线
+                    tv_discard_price.getPaint().setAntiAlias(true); //去掉锯齿
+
                     tv_sell_price.setText(Constant.RMB+ DateUtils.getOneDecimals(price-rebateAmount));
                     tv_all_number.setText("（共"+number+"件）");
                     tv_discounts_price.setText("已优惠"+Constant.RMB+DateUtils.getOneDecimals(rebateAmount));
                 } else {
                     int number = 0;
                     double price = 0;
-                    for (GoodsBean goodsBean: mGoodslistAdapter.getAllData()) {
+                    for (GoodsBean goodsBean: mGoodsBeans) {
                         number += goodsBean.getGoodsNum();
                         price += goodsBean.getTotalPrice();
                     }
@@ -471,7 +553,7 @@ public class ScanActivity extends BaseActivity implements View.OnClickListener, 
             public void onFail(BaseResponse baseResponse) {
                 int number = 0;
                 double price = 0;
-                for (GoodsBean goodsBean: mGoodslistAdapter.getAllData()) {
+                for (GoodsBean goodsBean: mGoodsBeans) {
                     number += goodsBean.getGoodsNum();
                     price += goodsBean.getTotalPrice();
                 }
@@ -489,12 +571,19 @@ public class ScanActivity extends BaseActivity implements View.OnClickListener, 
 
     private List<CreateOrderBean.DetailListBean> getCommonList() {
         List<CreateOrderBean.DetailListBean> detailListBeans = new ArrayList<>();
-        if (mGoodslistAdapter.getAllData().size() > 0) {
-            for (GoodsBean bean : mGoodslistAdapter.getAllData()) {
+        if (mGoodsBeans.size() > 0) {
+            for (GoodsBean bean :mGoodsBeans) {
                 CreateOrderBean.DetailListBean detailListBean = new CreateOrderBean.DetailListBean();
                 detailListBean.setProductId(bean.getGoodsId());
                 detailListBean.setPrice(bean.getSellingPrice());
                 detailListBean.setQuantity(bean.getGoodsNum());
+                detailListBeans.add(detailListBean);
+            }
+            if (bag != null) {
+                CreateOrderBean.DetailListBean detailListBean = new CreateOrderBean.DetailListBean();
+                detailListBean.setProductId(bag.getGoodsId());
+                detailListBean.setPrice(bag.getSellingPrice());
+                detailListBean.setQuantity(bag.getGoodsNum());
                 detailListBeans.add(detailListBean);
             }
         }
@@ -522,8 +611,13 @@ public class ScanActivity extends BaseActivity implements View.OnClickListener, 
                 @Override
                 public void onClick(View v) {
                     dismiss();
-                    mExitDownTimer.start();
-                    mClickExitDownTimer.cancel();
+                    if (mExitDownTimer != null) {
+                        mExitDownTimer.start();
+                    }
+                    if (mClickExitDownTimer != null) {
+                        mClickExitDownTimer.cancel();
+                    }
+
                 }
             });
             delete_goods_sure.setOnClickListener(new View.OnClickListener() {
@@ -565,7 +659,7 @@ public class ScanActivity extends BaseActivity implements View.OnClickListener, 
                 if (creatZFBSucceed) {
                     double price = 0;
                     int number = 0;
-                    for (GoodsBean goodsBean: mGoodslistAdapter.getAllData()) {
+                    for (GoodsBean goodsBean: mGoodsBeans) {
                         price += goodsBean.getTotalPrice();
                         number += goodsBean.getGoodsNum();
                     }
@@ -615,7 +709,7 @@ public class ScanActivity extends BaseActivity implements View.OnClickListener, 
                 if (creatWXSucceed) {
                     double price = 0;
                     int number = 0;
-                    for (GoodsBean goodsBean: mGoodslistAdapter.getAllData()) {
+                    for (GoodsBean goodsBean: mGoodsBeans) {
                         price += goodsBean.getTotalPrice();
                         number += goodsBean.getGoodsNum();
                     }
@@ -660,7 +754,7 @@ public class ScanActivity extends BaseActivity implements View.OnClickListener, 
         createOrderBean.setSubject(OperateSharedUtils.getStoreName(this));
         createOrderBean.setBody("转角街坊便利-" + OperateSharedUtils.getStoreName(this));
         double price = 0;
-        for (GoodsBean goodsBean: mGoodslistAdapter.getAllData()) {
+        for (GoodsBean goodsBean: mGoodsBeans) {
             price += goodsBean.getTotalPrice();
         }
         createOrderBean.setOrderAmount(price-rebateAmount);//应付金额

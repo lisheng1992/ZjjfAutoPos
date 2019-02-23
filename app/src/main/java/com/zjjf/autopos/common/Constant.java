@@ -15,9 +15,9 @@ public class Constant {
      * 服务器IP
      */
    // public static final String HOST = "www.jfun365.cn";
-    public static final String HOST = "192.168.1.10";
+    //public static final String HOST = "192.168.1.10";
 //     public static final String HOST = "192.168.1.188";
-    //public static final String HOST = "112.74.196.61";
+    public static final String HOST = "112.74.196.61";
     /**
      * 外网映射地址:192.168.1.10:8182
      */
@@ -27,7 +27,7 @@ public class Constant {
      */
     //public static final String PORT = ":8182/";
     //public static final String PORT = ":8185/";
-    public static final String PORT = "81/";
+    public static final String PORT = ":8888/";
 
     /**
      * 工程名
@@ -111,7 +111,8 @@ public class Constant {
     /**添加订单*/
     public static final String URL_ADD_ORDER = CONTEXTPATH + "api/order/create";
     /**生成支付订单*/
-    public static final String URL_CREATE_ORDER = CONTEXTPATH + "api/order/getpayurl";
+    //public static final String URL_CREATE_ORDER = CONTEXTPATH + "api/order/getpayurl";
+    public static final String URL_CREATE_ORDER = CONTEXTPATH + "api/order/platform/payQRcode";
     /**根据订单号查询订单信息*/
     public static final String URL_QUERY_ORDERINFO_BY_ORDERID = CONTEXTPATH + "api/order/getorderinfobyorderno";
     /**退款订单*/

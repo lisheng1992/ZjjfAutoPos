@@ -44,11 +44,12 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //hideSystemUI();
-        Window _window = getWindow();
-        WindowManager.LayoutParams params = _window.getAttributes();
-        params.systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION|View.SYSTEM_UI_FLAG_IMMERSIVE;
-        _window.setAttributes(params);
+        hideSystemUI();
+//        Window _window = getWindow();
+//        WindowManager.LayoutParams params = _window.getAttributes();
+//        params.systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION|View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+//        |View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
+//        _window.setAttributes(params);
         int layoutId = getLayoutId();
         setContentView(layoutId);
         PushAgent.getInstance(this).onAppStart();

@@ -101,10 +101,10 @@
 
             </LinearLayout>
 
-            <easyrecyclerview.EasyRecyclerView
+            <android.support.v7.widget.RecyclerView
                 android:id="@+id/erv_goods_list"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:scrollbars="none"
                 android:visibility="visible"/>
 
@@ -151,7 +151,7 @@
                 android:gravity="center_vertical"/>
 
             <TextView
-                android:id="@+id/tv_sall_bag"
+                android:id="@+id/tv_small_bag"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
@@ -160,7 +160,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginRight="20dp"
                 android:text="小号袋"
-                android:drawableLeft="@drawable/select_default"
+                android:drawableLeft="@drawable/select_click"
                 android:drawablePadding="5dp"
                 android:gravity="center_vertical"/>
 
